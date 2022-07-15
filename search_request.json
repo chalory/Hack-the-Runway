@@ -1,0 +1,25 @@
+{
+    "requests": [
+      {
+        "image": {
+          "source": {
+            "gcsImageUri": "gs://cloud-ai-vision-data/product-search-tutorial/images/468f782e70ba11e8941fd20059124800.jpg"
+          }
+        },
+        "features": [
+          {
+            "type": "PRODUCT_SEARCH"
+          }
+        ],
+        "imageContext": {
+          "productSearchParams": {
+            "productSet": "projects/hack-the-runway/locations/asia-east1/productSets/product_set0",
+            "productCategories": [
+                 "apparel-v2"
+               ],
+          "filter": "style=womens OR style=women"
+          }
+        }
+      }
+    ]
+  }
