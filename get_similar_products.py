@@ -3,7 +3,7 @@ from google.cloud import vision
 import pandas as pd
 from pprint import pprint
 
-df = pd.read_csv(r'/home/chantal/Downloads/vision_product_search_product_catalog.csv')
+df = pd.read_csv(r'/home/chantal/Downloads/vision_product_search_product_catalog_updated.csv')
 
 # df_new = df.iloc[:, 0:2]
 # df_new.columns = ['col1', 'col2']
@@ -15,7 +15,7 @@ df = pd.read_csv(r'/home/chantal/Downloads/vision_product_search_product_catalog
 
 def transformGS(gslink = 'gs://cloud-ai-vision-data/product-search-tutorial/images/468fc8f570ba11e8b821d20059124800.jpg'):
     newlink = f"https://storage.cloud.google.com/{gslink[5::]}"
-    print(newlink)
+    # print(newlink)
     return newlink
 
 def get_similar_products_uri(
@@ -62,11 +62,12 @@ def get_similar_products_uri(
     print(index_time)
 
     results = response.product_search_results.results
-    print(results)
+    # print(results)
 
-    # print('Search results:')
-    # for result in results:
-    #     product = result.product
+    print('Search results:')
+    for result in results:
+        product = result.product
+        print(product)
 
     #     print('Score(Confidence): {}'.format(result.score))
     #     print('Image name: {}'.format(result.image))
@@ -93,7 +94,7 @@ def getImageTag(imagePath):
         i -= 1
     x = imagePath[i+1::]
     X = int(x)
-    print(f"{imagePath} image{X}")
+    # print(f"{imagePath} image{X}")
     return f"image{X}"
 
 # returns image tags of all results as an array
@@ -101,18 +102,18 @@ def getAllImageTags(results):
     arr = [] # array of image tag strings 'image86'
     for result in results:
         arr.append((getImageTag(result.image), result.score))
-    print(arr)
+    # print(arr)
     return arr
 
-def sortAndPrintImages(similar_products):
-    for result in similar_products:
-        print()
+# def sortAndPrintImages(similar_products):
+#     for result in similar_products:
+#         print()
 
 
 # x = get_similar_products_uri(project_id='hack-the-runway', location='asia-east1', product_set_id='product_set0', product_category="apparel-v2", image_uri="gs://cloud-ai-vision-data/product-search-tutorial/images/468f782e70ba11e8941fd20059124800.jpg", filter="style=womens OR style=women")
 x = get_similar_products_uri(project_id='hack-the-runway', location='asia-east1', product_set_id='product_set0', product_category="apparel-v2", image_uri="gs://hack-the-runway.appspot.com/blue-plaid-pleated-jumper-2.jpg", filter="style=womens OR style=women") # 
 # getImageTag('projects/hack-the-runway/locations/asia-east1/products/product_id4/referenceImages/image4')
-print(getAllImageTags(x))
+# print(getAllImageTags(x))
 
 df_new = df.iloc[:, 0:2]
 df_new.columns = ['col1', 'col2']
@@ -127,8 +128,40 @@ def getLinks(imageTags, df):
     for tag, score in imageTags:
         gslink = (df[df['col2'] == tag]['col1'].max())
         link = transformGS(gslink)
-        arr.append((link, score))
-    pprint(arr)
+        arr.append((link, score, tag))
+    # pprint(arr)
     return arr
 
 getLinks(getAllImageTags(x), df_new)
+
+
+'''
+Search results:
+name: "projects/hack-the-runway/locations/asia-east1/products/product_id22"
+display_name: " "
+product_category: "apparel-v2"
+product_labels {
+  key: "style"
+  value: "women"
+}
+product_labels {
+  key: "category"
+  value: "dress"
+}
+product_labels {
+  key: "kids"
+  value: "true"
+
+
+'''
+
+'''
+gs://cloud-ai-vision-data/product-search-tutorial/images/46a0cbcf70ba11e89399d20059124800.jpg,
+image0,
+product_set0,
+product_id0,
+apparel-v2,
+6,
+\"style=women,
+category=shoe\"\r."
+'''

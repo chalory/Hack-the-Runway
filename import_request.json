@@ -1,7 +1,7 @@
 {
     "inputConfig": {
       "gcsSource": {
-        "csvFileUri": "gs://cloud-samples-data/vision/product_search/product_catalog.csv"
+        "csvFileUri": "gs://hack-the-runway.appspot.com/test9.csv"
       }
     }
   }
