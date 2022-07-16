@@ -1,72 +1,42 @@
 from google.cloud import vision
 
-def get_similar_products_file(
-        project_id,
-        location,
-        product_set_id,
-        product_category,
-        file_path,
-        filter,
-        max_results
-):
-    """Search similar products to image.
+def import_product_sets(project_id, location, gcs_uri):
+    """Import images of different products in the product set.
     Args:
         project_id: Id of the project.
         location: A compute region name.
-        product_set_id: Id of the product set.
-        product_category: Category of the product.
-        file_path: Local file path of the image to be searched.
-        filter: Condition to be applied on the labels.
-                Example for filter: (color = red OR color = blue) AND style = kids
-                It will search on all products with the following labels:
-                color:red AND style:kids
-                color:blue AND style:kids
-        max_results: The maximum number of results (matches) to return. If omitted, all results are returned.
+        gcs_uri: Google Cloud Storage URI.
+            Target files must be in Product Search CSV format.
     """
-    # product_search_client is needed only for its helper methods.
-    product_search_client = vision.ProductSearchClient()
-    image_annotator_client = vision.ImageAnnotatorClient()
+    client = vision.ProductSearchClient()
 
-    # Read the image as a stream of bytes.
-    with open(file_path, 'rb') as image_file:
-        content = image_file.read()
+    # A resource that represents Google Cloud Platform location.
+    location_path = f"projects/{project_id}/locations/{location}"
 
-    # Create annotate image request along with product search feature.
-    image = vision.Image(content=content)
+    # Set the input configuration along with Google Cloud Storage URI
+    gcs_source = vision.ImportProductSetsGcsSource(
+        csv_file_uri=gcs_uri)
+    input_config = vision.ImportProductSetsInputConfig(
+        gcs_source=gcs_source)
 
-    # product search specific parameters
-    product_set_path = product_search_client.product_set_path(
-        project=project_id, location=location,
-        product_set=product_set_id)
-    product_search_params = vision.ProductSearchParams(
-        product_set=product_set_path,
-        product_categories=[product_category],
-        filter=filter)
-    image_context = vision.ImageContext(
-        product_search_params=product_search_params)
+    # Import the product sets from the input URI.
+    response = client.import_product_sets(
+        parent=location_path, input_config=input_config)
 
-    # Search products similar to the image.
-    response = image_annotator_client.product_search(
-        image,
-        image_context=image_context,
-        max_results=max_results
-    )
+    print('Processing operation name: {}'.format(response.operation.name))
+    # synchronous check of operation status
+    result = response.result()
+    print('Processing done.')
 
-    index_time = response.product_search_results.index_time
-    print('Product set index time: ')
-    print(index_time)
+    for i, status in enumerate(result.statuses):
+        print('Status of processing line {} of the csv: {}'.format(
+            i, status))
+        # Check the status of reference image
+        # `0` is the code for OK in google.rpc.Code.
+        if status.code == 0:
+            reference_image = result.reference_images[i]
+            print(reference_image, '\n\n')
+        else:
+            print('Status code not OK: {}'.format(status.message))
 
-    results = response.product_search_results.results
-
-    print('Search results:')
-    for result in results:
-        product = result.product
-
-        print('Score(Confidence): {}'.format(result.score))
-        print('Image name: {}'.format(result.image))
-
-        print('Product name: {}'.format(product.name))
-        print('Product display name: {}'.format(
-            product.display_name))
-        print('Product description: {}\n'.format(product.description))
-        print('Product labels: {}\n'.format(product.product_labels))
+import_product_sets(project_id='hack-the-runway', location='asia-east1', gcs_uri='gs://cloud-samples-data/vision/product_search/product_catalog.csv')
