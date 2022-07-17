@@ -1,4 +1,4 @@
-##💡 Inspiration💡
+## 💡 Inspiration💡
 Have you ever been in a situation where your friend clicked a picture of their outfit and thought ‘I want that 👀'  and immediately saved that image in your phone for inspiration? We had that problem statement in mind when we created this app. We believe that self expression is healthy and utilizing clothes to convey who you are and what you stand for is amazing. We want this app to be a tool that helps you explore *you*. 
 
 References:
