@@ -20,16 +20,17 @@ def similar_products():
         img_url1.status_code = 200
         
 
-    return get_similar_products_info(img_url)
+    return get_similar_products_info('')
 
 # real_img1 | Poppy Dress                                          | https://dannirosedesigns.com/products/copy-of-sadie-dress?pr_prod_strat=collection_fallback&pr_rec_id=aea24e325&pr_rec_pid=7133789913283&pr_ref_pid=7181513588931&pr_seq=uniform |   170 | https://storage.cloud.google.com/cloud-ai-vision-data/product-search-tutorial/images/469ac87870ba11e88fe4d20059124800.jpg  
 
 
+# export GOOGLE_APPLICATION_CREDENTIALS="/Users/brayton/Downloads/hack-the-runway-3199276e8068.json"
 
-@app.route("/get_gallery/<user>")
-def get_gallery(phone_number):
+@app.route("/get_gallery")
+def get_gallery():
     # phone is not used right now
-    return get_wa_table()
+    return f"{get_wa_table()}"
 
 
 #
