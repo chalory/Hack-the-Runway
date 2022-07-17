@@ -16,6 +16,24 @@ We also did full justice to all the amazing technology that MLH and their sponso
 
 ## 🟣 CockroachDB 🟣
 We used CockroachDB to create, delete, edit and update our resources that was populated by the Google Cloud Vision API and connected to the WhatsApp and Twilio API.
+```python
+def info(conn):
+    with conn.cursor() as cur:
+        cur.execute(
+             "CREATE TABLE IF NOT EXISTS users_table (number INT)"),
+        cur.execute(
+             "CREATE TABLE IF NOT EXISTS wa_table (img_url VARCHAR(600), name VARCHAR(60), description VARCHAR(60), category VARCHAR(60) )")
+        cur.execute(
+             "CREATE TABLE IF NOT EXISTS search_table (img_url VARCHAR(600), name VARCHAR(60), extern_link VARCHAR(600), price INT, product_img_link VARCHAR(600) )")
+      
+      
+      
+        logging.debug("create_accounts(): status message: %s",
+                      cur.statusmessage)
+       
+    
+    conn.commit()  
+```
 
 ## 🔴 Twilio 🔴
 We used ngrok to connect Twilio to our flask app. We used a flask POST request that the Twilio whatsapp bot calls whenever the user sends a text, and is processed by flask.
