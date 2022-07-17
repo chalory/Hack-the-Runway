@@ -26,11 +26,11 @@ def similar_products():
 
 
 # export GOOGLE_APPLICATION_CREDENTIALS="/Users/brayton/Downloads/hack-the-runway-3199276e8068.json"
-
+import json
 @app.route("/get_gallery")
 def get_gallery():
     # phone is not used right now
-    return f"{get_wa_table()}"
+    return json.dumps(get_wa_table())
 
 
 #
