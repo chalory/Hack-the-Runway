@@ -1,13 +1,12 @@
 ##💡 Inspiration💡
 Have you ever been in a situation where your friend clicked a picture of their outfit and thought ‘I want that 👀'  and immediately saved that image in your phone for inspiration? We had that problem statement in mind when we created this app. We believe that self expression is healthy and utilizing clothes to convey who you are and what you stand for is amazing. We want this app to be a tool that helps you explore *you*. 
 
+References:
 https://repeller.com/self-expression-clothing/
 https://lifestylebyps.com/blogs/lifestyle/fashion-as-self-expression
 
 ## ⚙️ What it does ⚙️
-Features include:
-- You are able to upload, delete and edit your notes and images via the Whatsapp bot. You can also do that in the adjacent web app. 
-- Using Google Vision’s Image Detection Model,  we’re able to send an image to WhatsApp and it gives you back a list of similar products by feeding your image to the model and sending you back details like the link, price and reference images
+- Any images you like can be saved by giving it to the Whatsapp bot. Whether it's your friend's photo from a Whatsapp group chat or elsewhere. The bot saves your image, and you can optionally write notes about the image or not, and it will be stored in your personal WhatsThatStyle gallery. You can view your gallery on the web app, and tap on any image to get similar images and their details like where to buy them and their price.
 - You can plan your outfits via the notes feature of the web app, where you can upload images that you want to wear and easily access these notes that include a description that you can edit any time. 
 
 ## 🏗️ How we built it 🏗️
@@ -16,10 +15,14 @@ In a span of 48 hours, we used **Python and Flask** for the backend and **React.
 We also did full justice to all the amazing technology that MLH and their sponsors provided us with this weekend. We used CockroachDB, Coil, Twilio and GitHub. 
 
 ## 🟣 CockroachDB 🟣
+We used CockroachDB to create, delete, edit and update our resources that was populated by the Google Cloud Vision API and connected to the WhatsApp and Twilio API.
 
 ## 🔴 Twilio 🔴
+We used ngrok to connect Twilio to our flask app. We used a flask POST request that the Twilio whatsapp bot calls whenever the user sends a text, and is processed by flask.
 
 ## ⚫ Coil ⚫
+We used Coil's Web Monetization capabilities to provide an exclusive feature to users who have the coil extension. Monetized users can access cards in the Gallery which can provide fashion inspiration
+
 
 ## 🐙 Github
 
