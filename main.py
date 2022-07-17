@@ -14,6 +14,6 @@ def get_gallery(phone_number):
     return get_wa_table()
 
 
-
+#
 if __name__ == '__main__':
       app.run(port=5000)
