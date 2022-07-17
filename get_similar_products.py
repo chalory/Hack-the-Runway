@@ -201,15 +201,12 @@ x = get_similar_products_uri(project_id='hack-the-runway', location='asia-east1'
 print("here")
 # pprint(getLinks(getAllImageTags(x), df_new))
 
+from get_similar_products_2 import *
 from db import *
 # return [dictionary] 
 def get_similar_products_info(img_url):
     # get similar products to img url
-
-    x = get_similar_products_uri(project_id='hack-the-runway', location='asia-east1', product_set_id='product_set0', product_category="apparel-v2", image_uri=img_url, filter="style=womens OR style=women")
-=======
-    x = get_similar_products_uri(project_id='hack-the-runway', location='asia-east1', product_set_id='product_set0', product_category="apparel-v2", image_uri="gs://hack-the-runway.appspot.com/blue-plaid-pleated-jumper-2.jpg", filter="style=womens OR style=women")
-
+    x = get_similar_products_from_twilio_img(img_url)
 
     # [(link:str (.../.../),score: int (0.23),tag: str (image6))]
     similar_prod_info1 = getLinks(getAllImageTags(x), df_new)
@@ -264,7 +261,7 @@ def return_similar_products():
 
 
 print('this')
-pprint(get_similar_products_info('gs://hack-the-runway.appspot.com/blue-plaid-pleated-jumper-2.jpg'))
+# pprint(get_similar_products_info('gs://hack-the-runway.appspot.com/blue-plaid-pleated-jumper-2.jpg'))
 
 
 
@@ -273,3 +270,5 @@ pprint(get_similar_products_info('gs://hack-the-runway.appspot.com/blue-plaid-pl
 
 # searchtable contains all photo searchable image information 
 # lookup searchtable where link = link (key) in table -> []
+#   https://api.twilio.com/2010-04-01/Accounts/AC25b264f295b2e06eff7efc77a3ff2132/Messages/MM35743f3207ae1000d9eb7ef4548e6164/Media/ME7485ba4d6f47ab82089f405f0acf6487 | NULL      | NULL        | NULL      
+# https://api.twilio.com/2010-04-01/Accounts/AC25b264f295b2e06eff7efc77a3ff2132/Messages/MM5849a1fc9938bb660638e155fcf2153c/Media/ME5a450de3aba51f7efe69924b8a3ef78a
