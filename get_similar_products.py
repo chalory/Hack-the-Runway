@@ -15,6 +15,7 @@ df = pd.read_csv(r'/Users/brayton/Downloads/vision - vision_product_search_produ
 
 
 def transformGS(gslink = 'gs://cloud-ai-vision-data/product-search-tutorial/images/468fc8f570ba11e8b821d20059124800.jpg'):
+    if type(gslink) is float or gslink[0] != 'g': return gslink
     newlink = f"https://storage.cloud.google.com/{gslink[5::]}"
     # print(newlink)
     return newlink
