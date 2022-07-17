@@ -13,7 +13,7 @@ def info(conn):
         cur.execute(
              "CREATE TABLE IF NOT EXISTS wa_table (img_url VARCHAR(600), name VARCHAR(60), description VARCHAR(60), category VARCHAR(60) )")
         cur.execute(
-             "CREATE TABLE IF NOT EXISTS search_table (name VARCHAR(60), img_url VARCHAR(600), extern_link VARCHAR(600), price INT )")
+             "CREATE TABLE IF NOT EXISTS search_table (img_url VARCHAR(600), name VARCHAR(60), extern_link VARCHAR(600), price INT, product_img_link VARCHAR(600) )")
       
       
       
@@ -34,7 +34,14 @@ def insert_img_wa(img_url):
                       cur.statusmessage)
     conn.commit()
 
-
+def insert_img_search(img_url):
+    with conn.cursor() as cur:
+        cur.execute(
+            f"UPSERT INTO search_table (img_url, name, extern_link, price) VALUES ('{img_url}', '1', '2', 3)"
+        )
+        logging.debug("wa_tables(): status message: %s",
+                      cur.statusmessage)
+    conn.commit()
 
 def insert_wa_tables(conn, img_url, name, description, category):
     with conn.cursor() as cur:
@@ -66,6 +73,90 @@ def delete_img(conn,img_url):
                       cur.statusmessage)
     conn.commit()
 
+def get_where_link_is(img_url):
+    with conn.cursor() as cur:
+        cur.execute(
+            f"SELECT * FROM search_table WHERE product_img_link = '{img_url}' "
+        )
+        logging.debug("wa_tables(): status message: %s",
+                      cur.statusmessage)
+        result = cur.fetchall()
+    conn.commit()
+    # give back data
+    return result 
+
+def update_search_table_image_url(img_url, new_url):
+    with conn.cursor() as cur:
+        cur.execute(
+            f"UPDATE search_table SET img_url='{new_url}' WHERE product_img_link = '{img_url}'"
+        )
+        logging.debug("wa_tables(): status message: %s",
+                      cur.statusmessage)
+    conn.commit()
+
+
+def insert_search_table(img_url, name, extern_link, price, product_img_link):
+    with conn.cursor() as cur:
+        cur.execute(
+            f"INSERT INTO search_table (img_url, name, extern_link, price, product_img_link) VALUES ('{img_url}', '{name}','{extern_link}',{price}, '{product_img_link}' )"
+        )
+        logging.debug("wa_tables(): status message: %s",
+                      cur.statusmessage)
+    conn.commit()
+
+
+def get_search_table():
+    with conn.cursor() as cur:
+        cur.execute(
+            f"SELECT * FROM search_table"
+        )
+        logging.debug("wa_tables(): status message: %s",
+                      cur.statusmessage)
+        result = cur.fetchall()
+    conn.commit()
+    # give back data
+    print(result) 
+        
+def get_wa_table():
+    with conn.cursor() as cur:
+        cur.execute(
+            f"SELECT * FROM wa_table"
+        )
+        logging.debug("wa_tables(): status message: %s",
+                      cur.statusmessage)
+        result = cur.fetchall()
+    conn.commit()
+    # give back data
+    # print(result) 
+    return result
+
+# returns a [dict]
+def get_wa_results():
+    data = get_wa_table()
+    result = []
+    for singledata in data:
+        doc = {
+            'img_link': singledata[0] if singledata[0] else '',
+            'name': singledata[1] if singledata[0] else '',
+            'description': singledata[2] if singledata[0] else '',
+            'category': singledata[3] if singledata[0] else ''
+        }
+        result.append(doc)
+    return result
+    
+
 info(conn)
-insert_wa_tables(conn, img_url="https://api.twilio.com/2010-04-01/Accounts/AC25b264f295b2e06eff7efc77a3ff2132/Messages/MM6951950182a8763bbc558626b55d4ee0/Media/ME08965de80890f6f515252a49bacff03b", name='thi sname', description= None, category= None)
-delete_img(conn, img_url="gs://hack-the-runway.appspot.com/blue-plaid-pleated-jumper-2.jpg")
+# insert_wa_tables(conn, img_url="https://api.twilio.com/2010-04-01/Accounts/AC25b264f295b2e06eff7efc77a3ff2132/Messages/MM6951950182a8763bbc558626b55d4ee0/Media/ME08965de80890f6f515252a49bacff03b", name='thi sname', description= None, category= None)
+# delete_img(conn, img_url="gs://hack-the-runway.appspot.com/blue-plaid-pleated-jumper-2.jpg")
+# insert_img_search('some url')
+# insert_img_search('second url')
+# insert_img_search('second url11')
+# insert_img_search('second url111')
+# insert_img_search('second url1111')
+# insert_img_search('second url111111')
+# x = get_where_link_is('second url')
+# print(x)
+# update_search_table_image_url(img_url="img1", new_url="real_img1")
+# insert_search_table(img_url="img1", name="Pink Mini Dress Ringer Sheath Dress 90s Party", extern_link="https://www.etsy.com/listing/1036443637/pink-mini-dress-ringer-sheath-dress-90s", price=54.8, product_img_link="https://storage.cloud.google.com/cloud-ai-vision-data/product-search-tutorial/images/46923d6670ba11e89f5bd20059124800.jpg")
+from pprint import pprint
+pprint(get_wa_results())

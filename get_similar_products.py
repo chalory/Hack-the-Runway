@@ -59,7 +59,7 @@ def get_similar_products_uri(
 
     index_time = response.product_search_results.index_time
     print('Product set index time: ')
-    print(index_time)
+    # print(index_time)
 
     results = response.product_search_results.results
     # print(results)
@@ -67,7 +67,7 @@ def get_similar_products_uri(
     print('Search results:')
     for result in results:
         product = result.product
-        print(product)
+        # print(product)
 
     #     print('Score(Confidence): {}'.format(result.score))
     #     print('Image name: {}'.format(result.image))
@@ -123,6 +123,7 @@ df_new.columns = ['col1', 'col2']
 # print(df_new)
 
 # return an array of links based on image tags
+# twilurl  -> []
 def getLinks(imageTags, df):
     arr = []
     for tag, score in imageTags:
@@ -132,6 +133,7 @@ def getLinks(imageTags, df):
     # pprint(arr)
     return arr
 
+# x = get_similar_products_uri(project_id='hack-the-runway', location='asia-east1', product_set_id='product_set0', product_category="apparel-v2", image_uri=twiliorl appspot.com/blue-plaid-pleated-jumper-2.jpg", filter="style=womens OR style=women") # 
 getLinks(getAllImageTags(x), df_new)
 
 
@@ -165,3 +167,105 @@ apparel-v2,
 \"style=women,
 category=shoe\"\r."
 '''
+
+'''
+curl -X POST \
+-H "Authorization: Bearer "$(gcloud auth application-default print-access-token) \
+-H "Content-Type: application/json; charset=utf-8" \
+-d @import_request.json \
+https://vision.googleapis.com/v1/projects/$PROJECT_ID/locations/$LOCATION_ID/productSets:import
+'''
+'''
+curl -X GET \
+-H "Authorization: Bearer $(gcloud auth application-default print-access-token)" \
+-H "Content-Type: application/json" \
+https://vision.googleapis.com/v1/locations/$LOCATION_ID/operations/557bd0f4a139361d
+'''
+
+# url to image ->
+# getsimilarproductsuri(...,url) returns [urls of similar images] ->
+# use method that looks into search_table transform [urls of similar images] to [dictionaries with information of similar images]
+    # [
+    # {link: ..., price: ..., name: ...}, item1
+    # {link: ..., price: ..., name: ...}, item2
+    # {link: ..., price: ..., name: ...} item3
+    # ]
+
+# blue dress -> result=[{name:bluedress1, price:70}, {name:bluedress2, price:77}, {name:...,price:3}]
+# one dict can only one unique key
+# result[0].name
+# result[1].price
+# for product in result: print(product.name)
+
+x = get_similar_products_uri(project_id='hack-the-runway', location='asia-east1', product_set_id='product_set0', product_category="apparel-v2", image_uri="gs://hack-the-runway.appspot.com/blue-plaid-pleated-jumper-2.jpg", filter="style=womens OR style=women")
+print("here")
+# pprint(getLinks(getAllImageTags(x), df_new))
+
+from db import *
+# return [dictionary] 
+def get_similar_products_info(img_url):
+    # get similar products to img url
+    x = get_similar_products_uri(project_id='hack-the-runway', location='asia-east1', product_set_id='product_set0', product_category="apparel-v2", image_uri=img_url, filter="style=womens OR style=women")
+
+    # [(link:str (.../.../),score: int (0.23),tag: str (image6))]
+    similar_prod_info1 = getLinks(getAllImageTags(x), df_new)
+    # for test
+    # similar_prod_info1 = [('second url11',1,1),('second url1111',1,1),('second url',1,1)]
+
+    # match with the database for each and every similar product
+    # the database takes a link and maps it to its preset information
+    results = []
+    for (img_link, score, tag) in similar_prod_info1:
+        # print(get_where_link_is(img_link))
+        # (link, name, extern_link, price) = get_where_link_is(img_link)
+        print('img link', img_link)
+        data = get_where_link_is(img_link)
+        print('data')
+        if not data: continue
+        print(data[0][0])
+        # (link, name, extern_link, price) = data[0]
+        doc = {
+            'image_link': data[0][-1],
+            'name': data[0][1],
+            'extern_link': data[0][2],
+            'price': data[0][3],
+            'score': round(score * 100),
+            'tag': tag
+        }
+        results.append(doc)
+    return results
+'''
+[('real_img1',
+  'Solea Dress',
+  'https://www.etsy.com/au/listing/1097550887/solea-cartamodello-abito-bimba-tg-3a-10a',
+  10,
+  'https://storage.cloud.google.com/cloud-ai-vision-data/product-search-tutorial/images/469fe8d970ba11e8bc23d20059124800.jpg')]
+'''
+def return_similar_products():
+    
+    data = get_where_link_is('real_img1')
+    
+    pprint(data)
+    dictionaries = []
+    for singledataset in data:
+        dict = {
+            'img_link': singledataset[-1],
+            'name': singledataset[1],
+            'price': singledataset[3],
+            'purchase_link': singledataset[2]
+        }
+        dictionaries.append(dict)
+
+        pprint(dictionaries)
+
+
+print('this')
+pprint(get_similar_products_info('gs://hack-the-runway.appspot.com/blue-plaid-pleated-jumper-2.jpg'))
+
+
+
+
+
+
+# searchtable contains all photo searchable image information 
+# lookup searchtable where link = link (key) in table -> []
