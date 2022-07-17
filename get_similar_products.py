@@ -3,7 +3,8 @@ from google.cloud import vision
 import pandas as pd
 from pprint import pprint
 
-df = pd.read_csv(r'/home/chantal/Downloads/vision_product_search_product_catalog_updated.csv')
+# df = pd.read_csv(r'/home/chantal/Downloads/vision_product_search_product_catalog_updated.csv')
+df = pd.read_csv(r'/Users/brayton/Downloads/vision - vision_product_search_product_catalog.csv')
 
 # df_new = df.iloc[:, 0:2]
 # df_new.columns = ['col1', 'col2']
@@ -197,7 +198,7 @@ https://vision.googleapis.com/v1/locations/$LOCATION_ID/operations/557bd0f4a1393
 # result[1].price
 # for product in result: print(product.name)
 
-x = get_similar_products_uri(project_id='hack-the-runway', location='asia-east1', product_set_id='product_set0', product_category="apparel-v2", image_uri="gs://hack-the-runway.appspot.com/blue-plaid-pleated-jumper-2.jpg", filter="style=womens OR style=women")
+# x = get_similar_products_uri(project_id='hack-the-runway', location='asia-east1', product_set_id='product_set0', product_category="apparel-v2", image_uri="gs://hack-the-runway.appspot.com/blue-plaid-pleated-jumper-2.jpg", filter="style=womens OR style=women")
 print("here")
 # pprint(getLinks(getAllImageTags(x), df_new))
 
