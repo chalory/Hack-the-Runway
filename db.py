@@ -117,6 +117,7 @@ def get_search_table():
     # give back data
     print(result) 
         
+
 def get_wa_table():
     with conn.cursor() as cur:
         cur.execute(
@@ -143,6 +144,8 @@ def get_wa_results():
         }
         result.append(doc)
     return result
+
+
     
 
 info(conn)
@@ -158,5 +161,6 @@ info(conn)
 # print(x)
 # update_search_table_image_url(img_url="img1", new_url="real_img1")
 # insert_search_table(img_url="img1", name="Pink Mini Dress Ringer Sheath Dress 90s Party", extern_link="https://www.etsy.com/listing/1036443637/pink-mini-dress-ringer-sheath-dress-90s", price=54.8, product_img_link="https://storage.cloud.google.com/cloud-ai-vision-data/product-search-tutorial/images/46923d6670ba11e89f5bd20059124800.jpg")
+
 from pprint import pprint
 pprint(get_wa_results())

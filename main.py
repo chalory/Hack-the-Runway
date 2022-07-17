@@ -8,6 +8,7 @@ from get_similar_products import *
 def similar_products(img_url):
     return get_similar_products_info(img_url)
 
+
 @app.route("/get_gallery/<user>")
 def get_gallery(phone_number):
     # phone is not used right now
@@ -15,5 +16,11 @@ def get_gallery(phone_number):
 
 
 #
+
+return_similar_products()   
+
+
+
+
 if __name__ == '__main__':
       app.run(port=5000)

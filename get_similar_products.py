@@ -205,7 +205,11 @@ from db import *
 # return [dictionary] 
 def get_similar_products_info(img_url):
     # get similar products to img url
+
     x = get_similar_products_uri(project_id='hack-the-runway', location='asia-east1', product_set_id='product_set0', product_category="apparel-v2", image_uri=img_url, filter="style=womens OR style=women")
+=======
+    x = get_similar_products_uri(project_id='hack-the-runway', location='asia-east1', product_set_id='product_set0', product_category="apparel-v2", image_uri="gs://hack-the-runway.appspot.com/blue-plaid-pleated-jumper-2.jpg", filter="style=womens OR style=women")
+
 
     # [(link:str (.../.../),score: int (0.23),tag: str (image6))]
     similar_prod_info1 = getLinks(getAllImageTags(x), df_new)
