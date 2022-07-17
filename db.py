@@ -118,6 +118,33 @@ def get_search_table():
     print(result) 
         
 
+def get_wa_table():
+    with conn.cursor() as cur:
+        cur.execute(
+            f"SELECT * FROM wa_table"
+        )
+        logging.debug("wa_tables(): status message: %s",
+                      cur.statusmessage)
+        result = cur.fetchall()
+    conn.commit()
+    # give back data
+    # print(result) 
+    return result
+
+# returns a [dict]
+def get_wa_results():
+    data = get_wa_table()
+    result = []
+    for singledata in data:
+        doc = {
+            'img_link': singledata[0] if singledata[0] else '',
+            'name': singledata[1] if singledata[0] else '',
+            'description': singledata[2] if singledata[0] else '',
+            'category': singledata[3] if singledata[0] else ''
+        }
+        result.append(doc)
+    return result
+
 
     
 
@@ -134,3 +161,6 @@ info(conn)
 # print(x)
 # update_search_table_image_url(img_url="img1", new_url="real_img1")
 # insert_search_table(img_url="img1", name="Pink Mini Dress Ringer Sheath Dress 90s Party", extern_link="https://www.etsy.com/listing/1036443637/pink-mini-dress-ringer-sheath-dress-90s", price=54.8, product_img_link="https://storage.cloud.google.com/cloud-ai-vision-data/product-search-tutorial/images/46923d6670ba11e89f5bd20059124800.jpg")
+
+from pprint import pprint
+pprint(get_wa_results())
