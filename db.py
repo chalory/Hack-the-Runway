@@ -9,7 +9,7 @@ conn = psycopg2.connect("postgresql://chantal:hackrunway2022@free-tier6.gcp-asia
 def info(conn):
     with conn.cursor() as cur:
         cur.execute(
-             "CREATE TABLE IF NOT EXISTS users_table (number INT, num_of_searches INT)"),
+             "CREATE TABLE IF NOT EXISTS users_table (number INT)"),
         cur.execute(
              "CREATE TABLE IF NOT EXISTS wa_table (img_url VARCHAR(600), name VARCHAR(60), description VARCHAR(60), category VARCHAR(60) )")
         cur.execute(
